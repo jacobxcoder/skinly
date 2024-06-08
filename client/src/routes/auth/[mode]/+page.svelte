@@ -4,7 +4,6 @@
   import { page } from '$app/stores';
   import { goto } from '$app/navigation';
   import { login, register } from '$lib/api/auth.api';
-  import logger from '$lib/utils/logger';
 
   enum AuthMode {
     LOGIN = 'login',
@@ -37,6 +36,7 @@
     }
 
     await register(form.email, form.password);
+    goto('/auth/register-email-sent');
   }
 
   async function handleSubmit() {
@@ -144,7 +144,7 @@
           </div>
         {/if}
 
-        <Button type="submit" class="btn-primary w-full">
+        <Button type="submit" class="btn-primary w-full" {loading}>
           {$page.params.mode === AuthMode.LOGIN ? 'Sign in' : 'Sign up'}
         </Button>
       </form>
@@ -168,7 +168,7 @@
           </form>
 
           <form action="?/loginWithGithub" method="POST">
-            <Button type="submit" class="border-base-300 w-full" {loading}>
+            <Button type="submit" class="border-base-300 w-full">
               <enhanced:img src="$lib/assets/icons/github.svg" class="h-6 w-6" />
               <span class="text-sm font-semibold leading-6">Github</span>
             </Button>
@@ -178,7 +178,7 @@
     </div>
 
     {#if $page.params.mode === AuthMode.LOGIN}
-      <p class="mt-10 text-center text-sm">
+      <p class="mt-10 text-center">
         Not a member?
         <a
           href="/auth/register"
@@ -187,9 +187,11 @@
         </a>
       </p>
     {:else}
-      <p class="mt-10 text-center text-sm">
+      <p class="mt-10 text-center">
         Already a member?
-        <a href="/auth/login" class="link link-primary leading-6 no-underline">
+        <a
+          href="/auth/login"
+          class="link link-primary font-semibold leading-6 no-underline">
           Sign in.
         </a>
       </p>

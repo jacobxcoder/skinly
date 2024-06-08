@@ -6,6 +6,7 @@
     id?: string;
     type?: 'button' | 'submit' | 'reset';
     loading?: boolean;
+    disabled?: boolean;
   }
 
   const dispatch = createEventDispatcher();
@@ -13,6 +14,7 @@
   export let id: string | undefined = undefined;
   export let type: 'button' | 'submit' | 'reset' = 'button';
   export let loading = false;
+  export let disabled = false;
 
   let className: $$Props['class'] = '';
   export { className as class };
@@ -22,6 +24,7 @@
   {id}
   {type}
   class="btn {className}"
+  {disabled}
   {...$$restProps}
   on:click={(e) => dispatch('click', e)}>
   {#if loading}

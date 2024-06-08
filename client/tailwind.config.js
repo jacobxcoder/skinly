@@ -2,7 +2,11 @@
 export default {
   content: ['./src/**/*.{html,js,svelte,ts}'],
   theme: {
-    extend: {}
+    extend: {
+      fontFamily: {
+        sans: ['Lato', 'Inter', 'sans-serif']
+      }
+    }
   },
   daisyui: {
     themes: [
@@ -10,7 +14,7 @@ export default {
         light: {
           // eslint-disable-next-line
           ...require('daisyui/src/theming/themes').light,
-          primary: '#071013',
+          primary: '#FF6542',
           'primary-content': '#FFFFFF',
           base: '#FFFFFF',
           'base-content': '#2A2A2A'

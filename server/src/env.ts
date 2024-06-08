@@ -4,7 +4,7 @@ import dotenv from 'dotenv';
 dotenv.config();
 
 const envSchema = z.object({
-  PORT: z.string().default('3000'),
+  PORT: z.coerce.number().default(3000),
   CLIENT_URL: z.string(), // URL for the client/frontend of the app
 
   SUPABASE_URL: z.string(), // URL for the project

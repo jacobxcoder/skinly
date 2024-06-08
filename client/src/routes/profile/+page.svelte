@@ -1,5 +1,6 @@
 <script lang="ts">
   import { getUser, type User } from '$lib/api/auth.api';
+  import Loader from '$lib/components/common/loader/loader.svelte';
 
   let loading = false;
   let user: User | null = null;
@@ -23,9 +24,7 @@
 </script>
 
 {#if loading}
-  <div class="absolute left-0 top-0 flex h-full w-full items-center justify-center">
-    <div class="loading loading-spinner"></div>
-  </div>
+  <Loader />
 {/if}
 
 {#if user}
