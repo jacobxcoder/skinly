@@ -1,4 +1,5 @@
 import { supabase } from '@/integrations/supabase';
+import env from '@/env';
 
 export async function register(email: string, password: string) {
   const {
@@ -6,7 +7,10 @@ export async function register(email: string, password: string) {
     error
   } = await supabase.auth.signUp({
     email,
-    password
+    password,
+    options: {
+      emailRedirectTo: env.AUTH_REGISTER_REDIRECT_URL
+    }
   });
 
   if (error) {
@@ -34,6 +38,26 @@ export async function login(email: string, password: string) {
 
 export async function logout() {
   const { error } = await supabase.auth.signOut();
+
+  if (error) {
+    throw error;
+  }
+}
+
+export async function resetPasswordForEmail(email: string) {
+  const { error } = await supabase.auth.resetPasswordForEmail(email, {
+    redirectTo: env.AUTH_RESET_PASSWORD_URL
+  });
+
+  if (error) {
+    throw error;
+  }
+}
+
+export async function updatePassword(password: string) {
+  const { error } = await supabase.auth.updateUser({
+    password
+  });
 
   if (error) {
     throw error;
