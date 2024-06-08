@@ -2,8 +2,21 @@ import express from 'express';
 import cookieParser from 'cookie-parser';
 import cors from 'cors';
 import env from '@/env';
-import authRoutes from '@/routes/auth.routes';
 import logger from '@/shared/logger';
+
+import authRoutes from '@/routes/auth.routes';
+import profileRoutes from '@/routes/profile.routes';
+
+import { type User } from '@supabase/supabase-js';
+
+declare global {
+  // eslint-disable-next-line @typescript-eslint/no-namespace
+  namespace Express {
+    interface Request {
+      user?: User;
+    }
+  }
+}
 
 const app = express();
 
@@ -18,6 +31,7 @@ app.use(express.json());
 app.use(cookieParser());
 
 app.use('/auth', authRoutes);
+app.use('/profile', profileRoutes);
 
 app.listen(env.PORT, () => {
   logger.info(`Skinly server is running on port ${env.PORT}...`);

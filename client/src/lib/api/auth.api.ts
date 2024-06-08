@@ -1,16 +1,9 @@
 import server from '$lib/api';
+import { type User } from '@supabase/supabase-js';
 
-export interface User {
-  id: string;
-  email: string;
-  phone?: string;
-  updated_at?: Date;
-  email_confirmed_at?: Date;
-  created_at?: Date;
-  last_sign_in_at?: Date;
-}
+export type { User };
 
-export interface GetUserResponse {
+interface GetUserResponse {
   user: User;
 }
 
@@ -26,5 +19,10 @@ export async function login(email: string, password: string) {
 
 export async function getUser() {
   const response = await server.get<GetUserResponse>('/auth/user');
+  return response.data;
+}
+
+export async function logout() {
+  const response = await server.post('/auth/logout');
   return response.data;
 }
