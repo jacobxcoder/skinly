@@ -69,12 +69,10 @@
 <div class="flex min-h-full flex-col justify-center px-8 py-10 sm:px-6">
   <!-- Header with title and your logo -->
   <header class="sm:mx-auto sm:w-full sm:max-w-md">
-    <!-- @DO: Your logo here
-        <enhanced:img
-            class="h-6 w-auto"
-            src="$lib/assets/logo.svg"
-            alt="@DO: Fill your company name" />
-        -->
+    <enhanced:img
+      class="mx-auto mb-8 h-12 w-auto"
+      src="$lib/assets/logo.svg"
+      alt="logo of the skinly application" />
 
     <h2 class="mt-6 text-center text-3xl font-semibold leading-9">
       {$page.params.mode === AuthMode.LOGIN
