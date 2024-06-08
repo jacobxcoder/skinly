@@ -5,6 +5,8 @@ dotenv.config();
 
 const envSchema = z.object({
   PORT: z.string().default('3000'),
+  CLIENT_URL: z.string(), // URL for the client/frontend of the app
+
   SUPABASE_URL: z.string(), // URL for the project
   SUPABASE_KEY: z.string(), // anonymous API key
 
