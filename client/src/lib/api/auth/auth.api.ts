@@ -1,16 +1,16 @@
 import { supabase } from '$lib/api';
-import { type User } from '@supabase/supabase-js';
 import { PUBLIC_AUTH_REGISTER_REDIRECT_URL } from '$env/static/public';
+import { RegisterUserSchema, LoginUserSchema } from './auth.validator';
 
-export type { User };
+export async function register(form: RegisterUserSchema) {
+  const validatedInput = RegisterUserSchema.parse(form);
 
-export async function register(email: string, password: string) {
   const {
     data: { user },
     error
   } = await supabase.auth.signUp({
-    email,
-    password,
+    email: validatedInput.email,
+    password: validatedInput.password,
     options: {
       emailRedirectTo: PUBLIC_AUTH_REGISTER_REDIRECT_URL
     }
@@ -23,20 +23,19 @@ export async function register(email: string, password: string) {
   return user;
 }
 
-export async function login(email: string, password: string) {
+export async function login(form: LoginUserSchema) {
+  const validatedInput = LoginUserSchema.parse(form);
+
   const {
     data: { session },
     error
-  } = await supabase.auth.signInWithPassword({
-    email,
-    password
-  });
+  } = await supabase.auth.signInWithPassword(validatedInput);
 
   if (error) {
     throw error;
   }
 
-  return session;
+  return session?.user;
 }
 
 export async function logout() {

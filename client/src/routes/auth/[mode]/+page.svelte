@@ -3,7 +3,7 @@
   import { Icon, ExclamationCircle } from 'svelte-hero-icons';
   import { page } from '$app/stores';
   import { goto } from '$app/navigation';
-  import { login, register } from '$lib/api/auth.api';
+  import { login, register } from '$lib/api/auth/auth.api';
   import { auth } from '$lib/stores/auth';
 
   enum AuthMode {
@@ -27,12 +27,16 @@
   };
 
   async function handleLogin() {
-    const result = await login(form.email, form.password);
+    const user = await login(form);
 
-    $auth = {
-      user_id: result.user.id,
-      email: result.user.email
-    };
+    if (user) {
+      $auth = {
+        user_id: user.id,
+        email: user.email || ''
+      };
+    } else {
+      $auth = null;
+    }
 
     goto('/profile');
   }
@@ -42,7 +46,7 @@
       throw new Error('Passwords do not match');
     }
 
-    await register(form.email, form.password);
+    await register(form);
     goto('/auth/register-email-sent');
   }
 
