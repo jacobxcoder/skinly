@@ -1,6 +1,7 @@
 import Button from './common/button/button.svelte';
 import InputText from './common/input-text/input-text.svelte';
 import InputNumber from './common/input-number/input-number.svelte';
+import Textarea from './common/textarea/textarea.svelte';
 import Checkbox from './common/checkbox/checkbox.svelte';
 import Popover from './common/popover/popover.svelte';
 import Slideover from './common/slideover/slideover.svelte';
@@ -20,6 +21,7 @@ export {
   Button,
   InputText,
   InputNumber,
+  Textarea,
   Checkbox,
   Popover,
   Slideover,

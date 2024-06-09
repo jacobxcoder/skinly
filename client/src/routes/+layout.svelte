@@ -1,7 +1,7 @@
 <script lang="ts">
   import '../app.postcss';
 
-  import { Button } from '$lib/components';
+  import { Notifications, Button } from '$lib/components';
   import { logout } from '$lib/api/auth.api';
 
   let loading = false;
@@ -19,6 +19,9 @@
     loading = false;
   }
 </script>
+
+<!-- Container for the toast notifications -->
+<Notifications />
 
 <Button class="btn-primary mb-8" on:click={handleLogout} {loading}>Logout</Button>
 

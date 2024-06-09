@@ -1,8 +1,9 @@
 <script lang="ts">
   import { goto } from '$app/navigation';
-  import { Button, Loader, InputText } from '$lib/components';
+  import { AxiosError } from 'axios';
+  import { Button, Loader, InputText, Textarea, notify } from '$lib/components';
   import { getUser, type User } from '$lib/api/auth.api';
-  import { createProfile, getProfile } from '$lib/api/profile';
+  import { createProfile, updateProfile, getProfile } from '$lib/api/profile';
   import logger from '$lib/utils/logger';
   import type { Profile } from '$lib/api/profile/profile.validator';
 
@@ -11,10 +12,10 @@
 
   let createProfileLoading = false;
   let loading = false;
-  let error = '';
 
   let form = {
-    username: ''
+    username: '',
+    bio: ''
   };
 
   async function fetchUserAndProfile() {
@@ -23,51 +24,65 @@
     try {
       const response = await getUser();
       user = response.user;
-      console.log('user: ', user);
     } catch (e) {
-      // goto('/auth/login');
+      goto('/auth/login');
     }
 
     if (!user?.id) {
-      // goto('/auth/login');
+      goto('/auth/login');
     }
 
     try {
       const response = await getProfile(user?.id || 'abc');
-      console.log('response: ', response);
       profile = response;
+      form.username = profile?.username || '';
+      form.bio = profile?.bio || '';
     } catch (e) {
-      console.log(e);
-      logger.error('Failed to fetch user profile...', e);
-      // goto('/auth/login');
+      goto('/auth/login');
     }
 
     loading = false;
   }
 
-  async function handleCreateProfile() {
+  async function handleUpdateOrCreateProfile() {
+    console.log('here!');
     if (!user) {
-      error = 'User not found...';
+      notify('error', 'User not found.', 'Log in and try again.');
+      return;
+    }
+
+    if (!user.email) {
+      notify('error', 'User email not found.', 'Log in and try again.');
+      return;
+    }
+
+    if (!form.username) {
+      notify('error', 'Username is required.', 'Please enter a username.');
       return;
     }
 
     createProfileLoading = true;
 
     try {
-      if (!user.email) {
-        error = 'User email not found...';
-        return;
-      }
-
-      await createProfile({
-        email: user.email,
-        username: 'jakubszuminski',
-        bio: 'This is my bio!',
-        user_id: user?.id || ''
+      const response = await (profile ? updateProfile : createProfile)({
+        user_id: user.id,
+        username: form.username,
+        bio: form.bio,
+        email: user.email
       });
+
+      notify('success', `Profile ${profile ? 'updated' : 'created'} successfully.`);
     } catch (e) {
-      logger.error('Failed to create profile...', e);
-      error = 'Failed to create profile...';
+      if (e instanceof AxiosError) {
+        notify('error', e?.response?.data?.error);
+      } else {
+        logger.error('Failed to create profile.');
+        notify(
+          'error',
+          'Failed to create profile.',
+          'Try again later or contact support.'
+        );
+      }
     } finally {
       createProfileLoading = false;
     }
@@ -77,30 +92,40 @@
 </script>
 
 {#if loading}
-  <Loader />
+  <Loader full class="bg-base-200 bg-opacity-50" />
 {/if}
 
-{#if user}
-  <h1>Welcome, {user.email}</h1>
-  <p>Your account was created: {user.created_at}</p>
-{/if}
+<form
+  class="mx-auto flex max-w-xl flex-col gap-8 px-6 py-12"
+  on:submit|preventDefault={handleUpdateOrCreateProfile}>
+  <div>
+    <h1 class="mb-2 text-3xl font-semibold md:text-4xl">
+      {profile ? 'Your profile' : 'Create your profile'}
+    </h1>
 
-{#if !profile}
-  <p>You have not yet created your profile.</p>
-  <p>Before you use this app, you need to create it.</p>
+    {#if profile}
+      <p class="text-base-content-secondary">
+        Here you can update your profile information.
+      </p>
+    {:else}
+      <p class="text-base-content-secondary">
+        Create your profile in order to use this app.
+      </p>
+    {/if}
 
-  <Button
-    on:click={handleCreateProfile}
-    class="btn-primary"
-    loading={createProfileLoading}>Create Profile</Button>
-{:else}
-  <h2>Your Profile</h2>
-  <p>First Name: {profile.username}</p>
-  <p>Bio: {profile.bio}</p>
-{/if}
+    <div class="divider -mb-2"></div>
+  </div>
 
-<InputText bind:value={form.username} label="Username" />
+  <InputText bind:value={form.username} label="Username" placeholder="your_nickname" />
 
-{#if error}
-  <p class="text-red-500">{error}</p>
-{/if}
+  <Textarea
+    label="Bio (optional)"
+    placeholder="Short description of yourself..."
+    rows={3}
+    textAreaClass="resize-none"
+    bind:value={form.bio} />
+
+  <Button type="submit" class="btn-primary self-end" loading={createProfileLoading}>
+    {!profile ? 'Create profile' : 'Update profile'}
+  </Button>
+</form>
