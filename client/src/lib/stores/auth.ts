@@ -5,7 +5,7 @@ const AUTH_LOCAL_STORAGE_KEY = 'skinly-auth-storage-key';
 
 const AuthSchema = z.object({
   user_id: z.string(),
-  email: z.string().email()
+  email: z.string().email().optional()
 });
 
 export type Auth = z.infer<typeof AuthSchema>;

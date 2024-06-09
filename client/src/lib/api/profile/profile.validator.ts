@@ -4,7 +4,7 @@ export const profileSchema = z.object({
   id: z.string().or(z.number()),
   email: z.string().email(),
   username: z.string(),
-  bio: z.string().optional(),
+  bio: z.string().optional().nullable(),
   user_id: z.string()
 });
 

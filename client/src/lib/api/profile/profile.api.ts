@@ -1,28 +1,50 @@
-import server from '$lib/api';
+// @todo: fix error handling in this file
+import { supabase } from '$lib/api';
 import { z } from 'zod';
-import {
-  CreateProfileSchema,
-  UpdateProfileSchema,
-  ProfileResponseSchema
-} from './profile.validator';
+import { CreateProfileSchema, UpdateProfileSchema } from './profile.validator';
+
+export async function getProfile(userId: string) {
+  const { data, error } = await supabase
+    .from('profiles')
+    .select('*')
+    .eq('user_id', userId)
+    .single();
+
+  // @todo: handle this error message
+  if (error) {
+    throw new Error(`Failed to fetch profile: ${error.message}`);
+  }
+
+  return data;
+}
 
 export async function createProfile(
   profileData: z.infer<typeof CreateProfileSchema> & { user_id: string }
 ) {
-  const parsedData = CreateProfileSchema.parse(profileData);
-  const response = await server.post('/profile', parsedData);
-  return ProfileResponseSchema.parse(response.data);
-}
+  const validatedData = CreateProfileSchema.parse(profileData);
 
-export async function getProfile(userId: string) {
-  const response = await server.get(`/profile/${userId}`);
-  return ProfileResponseSchema.parse(response?.data);
+  const { error } = await supabase.from('profiles').insert([validatedData]);
+
+  if (error) {
+    throw new Error(`Failed to create profile: ${error.message}`);
+  }
+
+  return validatedData;
 }
 
 export async function updateProfile(
   profileData: z.infer<typeof UpdateProfileSchema> & { user_id: string }
 ) {
-  const parsedData = UpdateProfileSchema.parse(profileData);
-  const response = await server.put(`/profile/${profileData.user_id}`, parsedData);
-  return ProfileResponseSchema.parse(response.data);
+  const validatedData = UpdateProfileSchema.parse(profileData);
+
+  const { error } = await supabase
+    .from('profiles')
+    .update(validatedData)
+    .eq('user_id', profileData.user_id);
+
+  if (error) {
+    throw new Error(`Failed to update profile: ${error.message}`);
+  }
+
+  return validatedData;
 }

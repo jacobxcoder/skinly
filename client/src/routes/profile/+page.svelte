@@ -2,7 +2,7 @@
   import { goto } from '$app/navigation';
   import { AxiosError } from 'axios';
   import { Button, Loader, InputText, Textarea, notify } from '$lib/components';
-  import { getUser, type User } from '$lib/api/auth.api';
+  import { getUser, type User } from '$lib/api/auth';
   import { createProfile, updateProfile, getProfile } from '$lib/api/profile';
   import logger from '$lib/utils/logger';
   import type { Profile } from '$lib/api/profile/profile.validator';
@@ -22,8 +22,7 @@
     loading = true;
 
     try {
-      const response = await getUser();
-      user = response.user;
+      user = await getUser();
     } catch (e) {
       goto('/auth/login');
     }
@@ -33,14 +32,11 @@
     }
 
     try {
-      const response = await getProfile(user?.id || 'abc');
-      profile = response;
+      profile = await getProfile(user?.id || 'abc');
       form.username = profile?.username || '';
       form.bio = profile?.bio || '';
     } catch (e) {
       console.error(e);
-      console.error(e.message);
-      // goto('/auth/login');
     }
 
     loading = false;

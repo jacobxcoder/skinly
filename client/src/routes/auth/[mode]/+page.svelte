@@ -3,8 +3,9 @@
   import { Icon, ExclamationCircle } from 'svelte-hero-icons';
   import { page } from '$app/stores';
   import { goto } from '$app/navigation';
-  import { login, register } from '$lib/api/auth/auth.api';
+  import { getUser, login, register } from '$lib/api/auth/auth.api';
   import { auth } from '$lib/stores/auth';
+  import { onMount } from 'svelte';
 
   enum AuthMode {
     LOGIN = 'login',
@@ -75,6 +76,15 @@
   ) {
     goto('/auth/login');
   }
+
+  onMount(async () => {
+    if ($auth) {
+      const user = await getUser();
+      if (user) {
+        goto('/profile');
+      }
+    }
+  });
 </script>
 
 <div class="flex min-h-full flex-col justify-center px-8 py-10 sm:px-6">
