@@ -15,3 +15,5 @@ export const api = axios.create({
 export default api;
 
 export const supabase = createClient<Database>(PUBLIC_SUPABASE_URL, PUBLIC_SUPABASE_KEY);
+
+export type { Database };

@@ -1,9 +1,13 @@
 <script lang="ts">
-  import { browser } from '$app/environment';
-  import { uploadSelfie } from '$lib/api/selfies/selfies.api';
-  import { auth } from '$lib/stores/auth';
+  import { Button } from '$lib/components';
+  import {
+    getSelfiesByDate,
+    getSelfiesURLsByDate,
+    uploadSelfie
+  } from '$lib/api/selfies/selfies.api';
 
   let file: File | null = null;
+  let selfies: { signedUrl: string }[] = [];
 
   // Function to handle file changes
   function handleFileChange(event: Event) {
@@ -22,24 +26,34 @@
 
     const formData = new FormData();
     formData.append('file', file);
-    formData.append('date', new Date().toISOString());
-    formData.append('user_id', $auth?.user_id || '');
 
     try {
-      const response = await uploadSelfie(formData);
-
-      alert(`Upload successful: ${JSON.stringify(response.data)}`);
+      const response = await uploadSelfie(file, new Date());
+      console.log('response: ', response);
     } catch (error: any) {
-      alert(`Upload failed: ${error.response?.data || error.message}`);
+      console.log('error: ', error);
     }
+  }
+
+  async function fetchSelfies() {
+    selfies = await getSelfiesURLsByDate(new Date());
+    console.log('selfies: ', selfies);
   }
 </script>
 
-{#if browser}
-  <div>
-    <input type="file" on:change={handleFileChange} />
-    <button on:click={uploadFile} disabled={!file}>Upload File</button>
-  </div>
-{:else}
-  <p>This feature is only available in the browser.</p>
-{/if}
+<div>
+  <input type="file" on:change={handleFileChange} />
+  <button on:click={uploadFile} disabled={!file}>Upload File</button>
+</div>
+
+<p>List of selfies from today:</p>
+<ul>
+  {#each selfies as selfie}
+    <li>
+      {selfie.signedUrl}
+      <img src={selfie.signedUrl} alt="" />
+    </li>
+  {/each}
+</ul>
+
+<Button on:click={fetchSelfies}>Fetch selfies</Button>
