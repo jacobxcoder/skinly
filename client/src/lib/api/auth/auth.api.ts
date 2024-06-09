@@ -1,5 +1,8 @@
-import { supabase } from '@/integrations/supabase';
-import env from '@/env';
+import { supabase } from '$lib/api';
+import { type User } from '@supabase/supabase-js';
+import { PUBLIC_AUTH_REGISTER_REDIRECT_URL } from '$env/static/public';
+
+export type { User };
 
 export async function register(email: string, password: string) {
   const {
@@ -9,7 +12,7 @@ export async function register(email: string, password: string) {
     email,
     password,
     options: {
-      emailRedirectTo: env.AUTH_REGISTER_REDIRECT_URL
+      emailRedirectTo: PUBLIC_AUTH_REGISTER_REDIRECT_URL
     }
   });
 
@@ -44,31 +47,18 @@ export async function logout() {
   }
 }
 
-export async function resetPasswordForEmail(email: string) {
-  const { error } = await supabase.auth.resetPasswordForEmail(email, {
-    redirectTo: env.AUTH_RESET_PASSWORD_URL
-  });
+export async function getUser() {
+  const {
+    data: { user },
+    error
+  } = await supabase.auth.getUser();
 
   if (error) {
     throw error;
   }
-}
 
-export async function updatePassword(password: string) {
-  const { error } = await supabase.auth.updateUser({
-    password
-  });
-
-  if (error) {
-    throw error;
-  }
-}
-
-export async function getUser(token: string) {
-  const { data: user, error } = await supabase.auth.getUser(token);
-
-  if (error) {
-    throw error;
+  if (!user) {
+    return null;
   }
 
   return user;

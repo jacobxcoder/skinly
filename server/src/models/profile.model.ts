@@ -1,4 +1,4 @@
-import { supabase } from '@/shared/supabase';
+import { supabase } from '@/integrations/supabase';
 import { z } from 'zod';
 import {
   Profile,

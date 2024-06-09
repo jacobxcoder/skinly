@@ -3,6 +3,7 @@
 
   import { Notifications, Button } from '$lib/components';
   import { logout } from '$lib/api/auth.api';
+  import { auth } from '$lib/stores/auth';
 
   let loading = false;
 
@@ -19,6 +20,11 @@
     loading = false;
   }
 </script>
+
+<div class="user-data">
+  <p>User id: {$auth?.user_id}</p>
+  <p>User email: {$auth?.email}</p>
+</div>
 
 <!-- Container for the toast notifications -->
 <Notifications />

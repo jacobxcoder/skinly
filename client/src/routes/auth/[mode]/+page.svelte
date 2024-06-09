@@ -4,6 +4,7 @@
   import { page } from '$app/stores';
   import { goto } from '$app/navigation';
   import { login, register } from '$lib/api/auth.api';
+  import { auth } from '$lib/stores/auth';
 
   enum AuthMode {
     LOGIN = 'login',
@@ -26,7 +27,13 @@
   };
 
   async function handleLogin() {
-    await login(form.email, form.password);
+    const result = await login(form.email, form.password);
+
+    $auth = {
+      user_id: result.user.id,
+      email: result.user.email
+    };
+
     goto('/profile');
   }
 

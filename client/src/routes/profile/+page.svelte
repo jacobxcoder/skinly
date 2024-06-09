@@ -38,7 +38,9 @@
       form.username = profile?.username || '';
       form.bio = profile?.bio || '';
     } catch (e) {
-      goto('/auth/login');
+      console.error(e);
+      console.error(e.message);
+      // goto('/auth/login');
     }
 
     loading = false;
