@@ -1,49 +1,59 @@
 <script lang="ts">
-  import { Button } from '$lib/components';
-  import {
-    getSelfiesByDate,
-    getSelfiesURLsByDate,
-    uploadSelfie
-  } from '$lib/api/selfies/selfies.api';
+  import { goto } from '$app/navigation';
+  import { type User } from '$lib/api/auth';
+  import { getSelfiesURLsByDate, uploadSelfie } from '$lib/api/selfies/selfies.api';
+  import { Button, notify } from '$lib/components';
+  import { authorize } from '$lib/hooks';
 
-  let file: File | null = null;
+  let user: User | undefined | null;
+
+  let files: FileList | undefined;
+
   let selfies: { signedUrl: string }[] = [];
 
-  // Function to handle file changes
-  function handleFileChange(event: Event) {
-    const input = event.target as HTMLInputElement;
-    if (input.files && input.files.length > 0) {
-      file = input.files[0];
+  async function uploadFiles() {
+    if (!user) {
+      notify('error', 'Please log in first!', 'You need to be logged in ');
+      goto('/auth/login');
+      return;
     }
-  }
 
-  // Function to upload the file
-  async function uploadFile() {
-    if (!file) {
+    const filteredFiles = files?.filter((file) => file);
+
+    if (filteredFiles.length === 0) {
       alert('Please select a file first!');
       return;
     }
 
-    const formData = new FormData();
-    formData.append('file', file);
+    const now = new Date();
+    const uploadPromises = filteredFiles.map(
+      (file) => file && uploadSelfie(user, file, now)
+    );
 
     try {
-      const response = await uploadSelfie(file, new Date());
-      console.log('response: ', response);
-    } catch (error: any) {
-      console.log('error: ', error);
+      const results = await Promise.all(uploadPromises);
+      console.log('results: ', results);
+    } catch (e) {
+      notify(
+        'error',
+        'Upload failed.',
+        'An error occurred while uploading the file. Please try again later.'
+      );
     }
   }
 
   async function fetchSelfies() {
     selfies = await getSelfiesURLsByDate(new Date());
-    console.log('selfies: ', selfies);
   }
+
+  // Custom hooks
+  authorize().then((u) => (user = u));
 </script>
 
-<div>
-  <input type="file" on:change={handleFileChange} />
-  <button on:click={uploadFile} disabled={!file}>Upload File</button>
+<div class="mb-10 flex flex-col gap-4">
+  <input type="file" multiple accept="image/*" bind:files />
+
+  <Button class="btn-primary" on:click={uploadFiles}>Upload photos</Button>
 </div>
 
 <p>List of selfies from today:</p>

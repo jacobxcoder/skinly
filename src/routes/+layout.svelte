@@ -36,6 +36,8 @@
 
 <Breadcrumbs />
 
-<slot />
+<div class="px-6 pb-32">
+  <slot />
+</div>
 
 <Navigation />

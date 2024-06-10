@@ -1,18 +1,11 @@
 // @todo: fix error handling here
 
 import { supabase, type Database } from '$lib/api';
-import { getUser } from '$lib/api/auth';
+import { getUser, type User } from '$lib/api/auth';
 import { generateUUID } from '$lib/utils/uuid';
 
-export async function uploadSelfie(file: File, date: Date | number | string) {
-  // Step 1: Make sure that the user is authenticated
-  const user = await getUser();
-
-  if (!user) {
-    throw new Error('User is not authenticated');
-  }
-
-  // Step 2: Upload selfie to storage
+export async function uploadSelfie(user: User, file: File, date: Date | number | string) {
+  // Step 1: Upload selfie to storage
   const fileExt = file.name.split('.').pop();
   const fileName = `${generateUUID()}-${Date.now()}`;
 
@@ -24,7 +17,7 @@ export async function uploadSelfie(file: File, date: Date | number | string) {
     throw new Error(`Failed to upload selfie: ${error.message}`);
   }
 
-  // Step 3: Store selfie metadata in a table
+  // Step 2: Store selfie metadata in a table
   const _date = new Date(date);
   _date.setHours(0, 0, 0, 0);
   const timestampz = new Date(_date).toISOString();

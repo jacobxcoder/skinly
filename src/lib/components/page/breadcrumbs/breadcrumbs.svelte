@@ -34,7 +34,7 @@
 </script>
 
 {#if $breadcrumbs.length}
-  <nav class="flex px-6 py-6" aria-label="Breadcrumb">
+  <nav class="mb-6 flex px-6 py-12" aria-label="Breadcrumb">
     <ol role="list" class="flex items-center space-x-4 text-sm">
       <li>
         <div class="flex items-center">
@@ -63,4 +63,6 @@
       {/each}
     </ol>
   </nav>
+{:else}
+  <div class="mb-12"></div>
 {/if}
