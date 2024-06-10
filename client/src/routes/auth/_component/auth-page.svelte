@@ -1,11 +1,12 @@
 <script lang="ts">
   import { Button, InputText, Checkbox } from '$lib/components';
   import { Icon, ExclamationCircle } from 'svelte-hero-icons';
-  import { page } from '$app/stores';
   import { goto } from '$app/navigation';
   import { getUser, login, register } from '$lib/api/auth/auth.api';
   import { auth } from '$lib/stores/auth';
   import { onMount } from 'svelte';
+
+  export let mode: 'login' | 'register' | 'reset-password' = 'login';
 
   enum AuthMode {
     LOGIN = 'login',
@@ -55,9 +56,9 @@
     loading = true;
 
     try {
-      if ($page.params.mode === AuthMode.LOGIN) {
+      if (mode === AuthMode.LOGIN) {
         await handleLogin();
-      } else if ($page.params.mode === AuthMode.REGISTER) {
+      } else if (mode === AuthMode.REGISTER) {
         await handleRegister();
       }
 
@@ -70,9 +71,9 @@
   }
 
   $: if (
-    $page.params.mode !== AuthMode.LOGIN &&
-    $page.params.mode !== AuthMode.REGISTER &&
-    $page.params.mode !== AuthMode.RESET_PASSWORD
+    mode !== AuthMode.LOGIN &&
+    mode !== AuthMode.REGISTER &&
+    mode !== AuthMode.RESET_PASSWORD
   ) {
     goto('/auth/login');
   }
@@ -96,9 +97,7 @@
       alt="logo of the skinly application" />
 
     <h2 class="mt-6 text-center text-3xl font-semibold leading-9">
-      {$page.params.mode === AuthMode.LOGIN
-        ? 'Sign in to your account'
-        : 'Create your account'}
+      {mode === AuthMode.LOGIN ? 'Sign in to your account' : 'Create your account'}
     </h2>
   </header>
 
@@ -138,7 +137,7 @@
           bind:value={form.password}
           error={fieldErrors?.password?.[0]} />
 
-        {#if $page.params.mode === AuthMode.REGISTER}
+        {#if mode === AuthMode.REGISTER}
           <InputText
             id="confirmPassword"
             name="confirmPassword"
@@ -166,7 +165,7 @@
         {/if}
 
         <Button type="submit" class="btn-primary w-full" {loading}>
-          {$page.params.mode === AuthMode.LOGIN ? 'Sign in' : 'Sign up'}
+          {mode === AuthMode.LOGIN ? 'Sign in' : 'Sign up'}
         </Button>
       </form>
 
@@ -198,7 +197,7 @@
       </div>
     </div>
 
-    {#if $page.params.mode === AuthMode.LOGIN}
+    {#if mode === AuthMode.LOGIN}
       <p class="mt-10 text-center">
         Not a member?
         <a
