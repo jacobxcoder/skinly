@@ -2,25 +2,12 @@
   import '../app.postcss';
   import { onMount } from 'svelte';
 
-  import { Notifications, Button } from '$lib/components';
-  import { logout } from '$lib/api/auth';
+  import Navigation from '$lib/components/page/navigation/navigation.svelte';
+  import Breadcrumbs from '$lib/components/page/breadcrumbs/breadcrumbs.svelte';
+
+  import { Notifications } from '$lib/components';
   import { auth } from '$lib/stores/auth';
   import { supabase } from '$lib/api';
-
-  let loading = false;
-
-  async function handleLogout() {
-    loading = true;
-
-    try {
-      await logout();
-      location.reload();
-    } catch (e) {
-      console.error('Failed to log out...');
-    }
-
-    loading = false;
-  }
 
   /**
    * TODO: Need to check if it's always congruent with the $auth
@@ -44,14 +31,11 @@
   });
 </script>
 
-<div class="user-data">
-  <p>User id: {$auth?.user_id}</p>
-  <p>User email: {$auth?.email}</p>
-</div>
-
 <!-- Container for the toast notifications -->
 <Notifications />
 
-<Button class="btn-primary mb-8" on:click={handleLogout} {loading}>Logout</Button>
+<Breadcrumbs />
 
 <slot />
+
+<Navigation />
