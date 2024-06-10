@@ -5,8 +5,6 @@ import cors from 'cors';
 import env from '@/env';
 import logger from '@/shared/logger';
 
-import selfieRoutes from '@/routes/selfie.routes';
-
 import { type User } from '@supabase/supabase-js';
 
 declare global {
@@ -29,8 +27,6 @@ app.use(
 );
 app.use(express.json());
 app.use(cookieParser());
-
-app.use('/selfies', selfieRoutes);
 
 app.listen(env.PORT, () => {
   logger.info(`Skinly server is running on port ${env.PORT}...`);
