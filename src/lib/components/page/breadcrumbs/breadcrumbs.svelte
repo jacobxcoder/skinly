@@ -12,6 +12,7 @@
   const BreadcrumbMap: Record<string, string> = {
     '/': 'Home',
     '/gallery': 'Gallery',
+    '/gallery/calendar': 'History',
     '/gallery/upload': 'Upload',
     '/settings': 'Settings'
   };
