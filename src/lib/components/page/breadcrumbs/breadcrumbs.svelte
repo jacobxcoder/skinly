@@ -17,7 +17,15 @@
     '/settings': 'Settings'
   };
 
+  const noBreadcrumbs = ['/payment'];
+
   const breadcrumbs: Readable<Breadcrumb[]> = derived(page, ($page) => {
+    for (const noBreadcrumb of noBreadcrumbs) {
+      if ($page.url.pathname.startsWith(noBreadcrumb)) {
+        return [];
+      }
+    }
+
     const pathSnippets = $page.url.pathname.split('/').filter(Boolean);
     const paths: Breadcrumb[] = [];
 
