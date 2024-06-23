@@ -2,13 +2,15 @@
   import { Button } from '$lib/components';
 </script>
 
-<section id="hero" class="py-12">
+<section id="hero" class="px-6 py-12">
   <div class="mx-auto text-center">
-    <span class="mb-4 block text-sm font-semibold uppercase tracking-wide text-primary">
-      Tired of dermatologists and expensive skincare?
+    <span
+      class="mb-4 block text-xs font-semibold uppercase tracking-wide text-primary md:text-sm">
+      Tired of expensive drugs that do not work?
     </span>
 
-    <h1 class="mx-auto mb-6 max-w-3xl text-center text-5xl font-bold">
+    <h1
+      class="mx-auto mb-6 block max-w-3xl text-center text-2xl font-bold md:text-3xl lg:text-5xl lg:leading-[4rem]">
       Get rid of acne for good by treating the root cause
     </h1>
 
