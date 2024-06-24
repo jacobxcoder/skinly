@@ -2,7 +2,7 @@
   import { Button } from '$lib/components';
 </script>
 
-<section id="hero" class="px-6 py-12">
+<section id="hero" class="px-6 pb-12 pt-48">
   <div class="mx-auto text-center">
     <span
       class="mb-4 block text-xs font-semibold uppercase tracking-wide text-primary md:text-sm">

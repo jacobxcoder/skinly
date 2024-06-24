@@ -2,8 +2,8 @@
   import '../app.postcss';
   import { onMount } from 'svelte';
 
-  import Navigation from '$lib/components/page/navigation/navigation.svelte';
-  import Breadcrumbs from '$lib/components/page/breadcrumbs/breadcrumbs.svelte';
+  //import Navigation from '$lib/components/page/navigation/navigation.svelte';
+  //import Breadcrumbs from '$lib/components/page/breadcrumbs/breadcrumbs.svelte';
 
   import { Notifications } from '$lib/components';
   import { auth } from '$lib/stores/auth';
@@ -34,10 +34,4 @@
 <!-- Container for the toast notifications -->
 <Notifications />
 
-<Breadcrumbs />
-
-<div class="px-6 pb-32">
-  <slot />
-</div>
-
-<Navigation />
+<slot />
