@@ -31,7 +31,7 @@
         <div class="lg:max-w-lg">
           <h2 class="font-semibold leading-7 text-primary">Heal your skin for good</h2>
           <p class="mt-2 text-3xl font-bold tracking-tight sm:text-4xl">
-            Your roadmap to having a clear skin
+            Your roadmap to clear skin
           </p>
           <p class="text-base-content-secondary mt-6">
             Skinly is an application for both web and mobile which serves as your guidance
