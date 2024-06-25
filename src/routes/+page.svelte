@@ -4,6 +4,7 @@
   import FeaturesSection from '$lib/components/page/landing/features.svelte';
   import SupportSection from '$lib/components/page/landing/support.svelte';
   import CTASection from '$lib/components/page/landing/cta.svelte';
+  import PricingSection from '$lib/components/page/landing/pricing.svelte';
 </script>
 
 <div>
@@ -12,4 +13,5 @@
   <FeaturesSection />
   <SupportSection />
   <CTASection />
+  <PricingSection />
 </div>

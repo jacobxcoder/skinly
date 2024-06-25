@@ -19,7 +19,7 @@
 </script>
 
 <nav
-  class="fixed left-0 top-0 w-full border-b border-base-300 bg-base-200 bg-opacity-10 px-8 py-6 shadow-sm backdrop-blur-sm">
+  class="fixed left-0 top-0 w-full border-b border-base-300 bg-white bg-opacity-90 px-8 py-6 shadow-sm backdrop-blur-sm">
   <div class="mx-auto flex max-w-3xl items-center justify-between">
     <!-- Here should be a logo -->
     <div id="logo">
