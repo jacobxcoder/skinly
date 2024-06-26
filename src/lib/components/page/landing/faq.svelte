@@ -45,7 +45,6 @@
       {#each questions as { question, answer, open }}
         <div class="pt-6">
           <dt>
-            <!-- Expand/collapse question button -->
             <button
               type="button"
               class="flex w-full items-start justify-between text-left"
@@ -61,6 +60,7 @@
               </span>
             </button>
           </dt>
+
           {#if open}
             <dd class="pr-12 pt-2" transition:fade={{ duration: 150 }}>
               <p class="text-base-content-secondary text-base leading-7">

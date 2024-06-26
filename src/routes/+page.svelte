@@ -6,6 +6,7 @@
   import CTASection from '$lib/components/page/landing/cta.svelte';
   import PricingSection from '$lib/components/page/landing/pricing.svelte';
   import FAQSection from '$lib/components/page/landing/faq.svelte';
+  import FooterBar from '$lib/components/page/landing/footer.svelte';
 </script>
 
 <div>
@@ -16,4 +17,5 @@
   <CTASection />
   <PricingSection />
   <FAQSection />
+  <FooterBar />
 </div>
