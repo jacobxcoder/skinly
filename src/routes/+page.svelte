@@ -5,6 +5,7 @@
   import SupportSection from '$lib/components/page/landing/support.svelte';
   import CTASection from '$lib/components/page/landing/cta.svelte';
   import PricingSection from '$lib/components/page/landing/pricing.svelte';
+  import FAQSection from '$lib/components/page/landing/faq.svelte';
 </script>
 
 <div>
@@ -14,4 +15,5 @@
   <SupportSection />
   <CTASection />
   <PricingSection />
+  <FAQSection />
 </div>
